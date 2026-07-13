@@ -1,7 +1,7 @@
 
 You're only doing two things:
 
-1. Secure your account (MFA)
+1. Secure your root account by enabling Multi-Factor Authentication (MFA).
 2. Protect yourself from unexpected charges (Budget Alert)
 
 ---
@@ -40,6 +40,16 @@ This is where you manage the **Root User's** security settings.
 ## Step 3: Enable MFA
 
 Find the **Multi-factor authentication (MFA)** section.
+
+
+
+Choose one of the supported MFA methods:
+
+- Passkey (Recommended if supported on your device)
+- Authenticator app (Google Authenticator, Microsoft Authenticator, Authy, etc.)
+- Hardware security key (Advanced)
+
+Any of these methods satisfies the lab requirement.
 
 Click:
 
@@ -85,17 +95,22 @@ Status
 Enabled ✅
 ```
 
-Take a screenshot.
+<img width="1920" height="1294" alt="image" src="https://github.com/user-attachments/assets/e08843a7-4a0b-45fd-bb63-33006b8f67d3" />
+
+<img width="1902" height="800" alt="image" src="https://github.com/user-attachments/assets/ea520d9f-baf0-4098-9da7-3daee049ab52" />
+
+
+
 
 **Do not include the QR code**—only the confirmation that MFA is enabled.
 
 ---
 
-## Step 6: Write a Short Note
 
-Example:
 
 > The root user has full access to the AWS account. It should only be used for account-level tasks such as enabling MFA or managing billing. For everyday work, IAM users or roles are recommended.
+
+> I secured my AWS root user by enabling a passkey. This adds a strong second factor of authentication and helps protect the AWS account from unauthorized access.
 
 ---
 
@@ -105,7 +120,7 @@ The goal is simple:
 
 If your AWS spending reaches a limit (for example, **$5**), AWS sends you an email.
 
-This helps prevent surprise bills.
+A billing budget does not stop AWS from charging you. It only monitors your costs and sends email alerts when your spending reaches the configured threshold.
 
 ---
 
@@ -130,7 +145,13 @@ Click:
 
 > **Create budget**
 
+
+<img width="1892" height="800" alt="image" src="https://github.com/user-attachments/assets/d45bc344-6a7f-4fb0-9bcb-2433d96ab9f4" />
+
+
 ---
+
+
 
 ## Step 3: Choose Budget Type
 
@@ -154,6 +175,9 @@ Example:
 
 Click **Next**.
 
+<img width="2560" height="2304" alt="image" src="https://github.com/user-attachments/assets/a1a7b306-c3db-47b5-b140-3aca19c32ae2" />
+
+
 ---
 
 ## Step 5: Configure Email Alerts
@@ -168,13 +192,20 @@ AWS will send an email when your spending reaches that amount.
 
 Click **Create Budget**.
 
+
+<img width="2557" height="922" alt="image" src="https://github.com/user-attachments/assets/e795ddc4-7ecb-4b3d-a123-29860094deb4" />
+<img width="1722" height="1080" alt="image" src="https://github.com/user-attachments/assets/f5cd3426-9df2-4905-8f97-845f273f2dc0" />
+<img width="2510" height="887" alt="image" src="https://github.com/user-attachments/assets/bf47b8b8-71ae-4b34-9bff-186a274ae052" />
+
+
 ---
 
 ## Step 6: Confirm
 
 You should see your budget listed.
 
-Take a screenshot.
+<img width="2557" height="785" alt="image" src="https://github.com/user-attachments/assets/c918f7aa-d6d5-4314-b61f-c48ef9189213" />
+
 
 ---
 
