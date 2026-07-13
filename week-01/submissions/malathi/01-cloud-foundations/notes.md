@@ -31,3 +31,16 @@ You must secure your IAM users, passwords, applications, data, and permissions i
 
 
 > **AWS secures the cloud. You secure what you build in the cloud.**
+
+
+Today's Takeaways
+
+✅ Region = Geographic Location
+
+✅ AZ = Data Center
+
+✅ Multiple AZ = High Availability
+
+✅ AWS secures the cloud
+
+✅ Customer secures resources
