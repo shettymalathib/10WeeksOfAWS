@@ -1,5 +1,5 @@
 
-You're only doing two things:
+Here we're only doing two things:
 
 1. Secure your root account by enabling Multi-Factor Authentication (MFA).
 2. Protect yourself from unexpected charges (Budget Alert)
