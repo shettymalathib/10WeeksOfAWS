@@ -278,6 +278,9 @@ Then select:
 Add Provider
 ```
 
+<img width="2540" height="772" alt="image" src="https://github.com/user-attachments/assets/d60b5c6a-6b4c-4360-bf3b-a5968fecedd7" />
+
+
 ---
 
 # Step 3 – Configure the Identity Provider
@@ -374,6 +377,9 @@ Then click:
 Add Provider
 ```
 
+<img width="2535" height="1005" alt="image" src="https://github.com/user-attachments/assets/6d0640fb-97e1-4715-b2db-ab091bba3677" />
+
+
 ---
 
 # Step 4 – Verify the Provider
@@ -390,15 +396,10 @@ The provider status should indicate that it has been successfully created.
 
 # Screenshot
 
-Capture a screenshot showing the newly created Identity Provider.
+The newly created Identity Provider - oidc-provider.png
 
-Save it as:
+<img width="2532" height="777" alt="image" src="https://github.com/user-attachments/assets/75ab8ae1-06e1-41f9-86f8-64d00cd1e6a0" />
 
-```text
-week-01/submissions/malathi/05-github-oidc-challenge/screenshots/oidc-provider.png
-```
-
-This screenshot is required for your Week 1 submission.
 
 ---
 
@@ -496,19 +497,7 @@ Before continuing, verify that:
 
 # Summary
 
-In this lab you learned:
-
-* What an Identity Provider is.
-* Why GitHub uses OpenID Connect.
-* How AWS validates GitHub identities.
-* Why AWS STS is required.
-* Why temporary credentials are more secure.
-* How to create an OIDC Identity Provider in AWS IAM.
-
 At this point, GitHub can be **trusted** by AWS, but it still has **no permissions**.
-
-The next lab will create an IAM Role that defines **what GitHub is allowed to do** after it successfully authenticates.
-
 ---
 
 # Key Takeaways
@@ -622,6 +611,9 @@ Click:
 Create role
 ```
 
+<img width="2557" height="762" alt="image" src="https://github.com/user-attachments/assets/7e4e4fc4-15a4-4bda-a3d1-1d0539c27d34" />
+
+
 ---
 
 # Step 2 – Select Trusted Entity
@@ -731,6 +723,9 @@ Click:
 Next
 ```
 
+<img width="2560" height="1382" alt="image" src="https://github.com/user-attachments/assets/6ef202e9-bf80-4d49-9235-68e39a5e1ce4" />
+
+
 ---
 
 # Why Restrict the Repository?
@@ -799,6 +794,9 @@ Click:
 Next
 ```
 
+<img width="2537" height="721" alt="image" src="https://github.com/user-attachments/assets/36633fdc-a397-40f5-890f-17fa8d9183a4" />
+
+
 ---
 
 # Why AmazonS3ReadOnlyAccess?
@@ -833,6 +831,9 @@ Click:
 ```text
 Create role
 ```
+
+<img width="2560" height="1861" alt="image" src="https://github.com/user-attachments/assets/cefc878a-c50d-4da2-8534-6f5cef2fece3" />
+
 
 ---
 
@@ -1032,6 +1033,9 @@ Open:
 ```text
 github-oidc-challenge-role
 ```
+
+<img width="2522" height="815" alt="image" src="https://github.com/user-attachments/assets/480a4067-82e6-4322-8399-125580c935cd" />
+
 
 ---
 
@@ -1291,6 +1295,8 @@ For this lab:
 repo:shettymalathib/10WeeksOfAWS:ref:refs/heads/main
 ```
 
+
+
 Breaking it down:
 
 | Part           | Meaning                      |
@@ -1400,15 +1406,10 @@ This file becomes part of your Week 1 submission.
 
 ---
 
-# Required Screenshots
+<img width="2097" height="942" alt="image" src="https://github.com/user-attachments/assets/6381be06-35f1-446e-9177-bbfcec8dbf7a" />
+<img width="1487" height="412" alt="image" src="https://github.com/user-attachments/assets/a3929e28-8e5c-4f1c-871f-0679c31b0bac" />
 
-Capture screenshots of:
-
-* OIDC Provider
-* IAM Role Summary
-* Trust Policy
-
-These screenshots demonstrate that:
+The screenshots demonstrate that:
 
 * The Identity Provider exists.
 * The IAM Role exists.
@@ -1915,6 +1916,11 @@ Click the green **Run workflow** button.
 
 Wait approximately **30–60 seconds**.
 
+https://github.com/shettymalathib/10WeeksOfAWS/actions/workflows/aws-oidc-challenge.yml
+
+<img width="2557" height="921" alt="image" src="https://github.com/user-attachments/assets/0b37d6c9-3b3c-4dec-97c0-06da9a78202d" />
+
+
 ---
 
 # Expected Workflow
@@ -1958,13 +1964,16 @@ Most authentication failures occur because one of these settings is incorrect.
 
 ---
 
-# Required Screenshots
 
-Capture screenshots of:
+
+The screenshots of:
 
 * Successful workflow execution
 * Verify Identity output
 * List S3 Buckets output
+
+<img width="2560" height="1377" alt="image" src="https://github.com/user-attachments/assets/8d39685d-9cc2-4d4a-b0e2-bc0f41061a31" />
+
 
 These screenshots demonstrate that GitHub authenticated successfully using OIDC.
 
@@ -2015,13 +2024,12 @@ The final lab explains the workflow output, common troubleshooting techniques, s
 
 
 
-# Lab 5 – Understanding the Output, Security Best Practices, and Final Submission
+#  Understanding the Output for above github actions yml file, Security Best Practices
 
 ---
 
 # Lab Objective
 
-Congratulations!
 
 You have successfully completed the GitHub OIDC setup.
 
@@ -2344,7 +2352,6 @@ This lab restricts access to:
 * One repository
 * One branch
 
-For learning purposes, this is sufficient.
 
 In production environments, you can further restrict access by allowing only:
 
@@ -2356,145 +2363,7 @@ In production environments, you can further restrict access by allowing only:
 
 These additional restrictions reduce the attack surface and improve overall security.
 
----
 
-# Required Screenshots
-
-For your Week 1 submission, capture:
-
-* OIDC Provider
-* IAM Role Summary
-* Trust Policy
-* Successful GitHub Actions workflow
-* Verify Identity output
-* List S3 Buckets output
-
-These screenshots demonstrate that GitHub successfully authenticated with AWS using OIDC and temporary credentials.
-
----
-
-# Week 1 Folder Structure
-
-Your repository should contain a structure similar to the following:
-
-```text
-week-01/
-└── submissions/
-    └── malathi/
-        ├── README.md
-        ├── notes.md
-        ├── 01-cloud-foundations/
-        ├── 02-iam-basics/
-        ├── 03-account-security-lab/
-        ├── 04-iam-hands-on-lab/
-        ├── 05-github-oidc-challenge/
-        │   ├── oidc/
-        │   │   └── trust-policy.json
-        │   ├── .github/
-        │   │   └── workflows/
-        │   │       └── aws-oidc-challenge.yml
-        │   └── screenshots/
-        │       ├── oidc-provider.png
-        │       ├── iam-role.png
-        │       ├── trust-policy.png
-        │       ├── github-actions-success.png
-        │       ├── verify-identity.png
-        │       └── list-s3-buckets.png
-        └── screenshots/
-```
-
----
-
-# LinkedIn Post
-
-You can use the following post to share your achievement:
-
-> 🔐 **Day 5 of #10WeeksOfAWS**
->
-> Today I completed the optional **GitHub OIDC Challenge**.
->
-> Instead of storing AWS Access Keys in GitHub, I configured GitHub Actions to securely authenticate with AWS using **OpenID Connect (OIDC)**.
->
-> Authentication flow:
->
-> GitHub Actions → OIDC Token → AWS IAM OIDC Provider → AWS STS → Temporary AWS Credentials
->
-> Key takeaways:
->
-> ✅ No long-lived AWS Access Keys stored in GitHub.
->
-> ✅ Temporary credentials are generated only during workflow execution.
->
-> ✅ This follows AWS security best practices for CI/CD authentication.
->
-> Every day I'm learning not just how AWS works, but also how to build secure cloud solutions.
->
-> #10WeeksOfAWS #AWS #GitHubActions #OIDC #CloudSecurity #CloudAdhar #TrainWithShubham
-
----
-
-# Architecture Diagram
-
-```text
-              GitHub Actions
-                     │
-                     ▼
-                OIDC Token
-                     │
-                     ▼
-        AWS IAM OIDC Provider
-                     │
-                     ▼
-               Trust Policy
-                     │
-                     ▼
-                 AWS STS
-                     │
-                     ▼
-      Temporary AWS Credentials
-                     │
-                     ▼
-         Access AWS Resources
-```
-
----
-
-# Verification Checklist
-
-Before considering the lab complete, confirm:
-
-* ✅ OIDC Provider created.
-* ✅ IAM Role created.
-* ✅ Trust Policy verified.
-* ✅ `AmazonS3ReadOnlyAccess` policy attached.
-* ✅ Workflow created.
-* ✅ Workflow committed and pushed.
-* ✅ Workflow executed successfully.
-* ✅ `aws sts get-caller-identity` returned the expected output.
-* ✅ `aws s3 ls` executed successfully.
-* ✅ Required screenshots captured.
-* ✅ Notes and documentation completed.
-
----
-
-# Final Summary
-
-Congratulations!
-
-You have successfully completed the GitHub OIDC Challenge.
-
-You learned:
-
-* How GitHub authenticates with AWS using OIDC.
-* How AWS validates GitHub's identity.
-* How IAM Roles provide temporary permissions.
-* How Trust Policies restrict access to a specific repository and branch.
-* How AWS STS issues temporary credentials.
-* How GitHub Actions securely interact with AWS.
-* Why OIDC is preferred over long-lived AWS Access Keys.
-* Security best practices for CI/CD authentication.
-
-This lab introduced one of the most important modern authentication methods used in cloud-native DevOps and AWS environments.
 
 ---
 
