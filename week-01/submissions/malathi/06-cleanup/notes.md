@@ -15,6 +15,8 @@ learner-s3
 learner-ec2
 learner-billing
 ```
+<img width="2557" height="507" alt="image" src="https://github.com/user-attachments/assets/2bbc7dfd-bb49-47a9-a7c5-4e848a2ef51d" />
+
 
 ### IAM Groups
 
@@ -24,11 +26,17 @@ EC2ReadOnlyGroup
 BillingViewGroup
 ```
 
+<img width="2547" height="576" alt="image" src="https://github.com/user-attachments/assets/11ce8e16-1362-4f84-bac4-2904206cee10" />
+
+
 ### Customer Managed Policy
 
 ```
 CustomS3ReadOnlyTrainingPolicy
 ```
+
+<img width="2541" height="432" alt="image" src="https://github.com/user-attachments/assets/b69db290-14a0-4da7-95d5-620eb01a82e0" />
+
 
 ---
 
@@ -53,6 +61,9 @@ Delete:
 * `learner-s3`
 * `learner-ec2`
 * `learner-billing`
+
+<img width="2552" height="532" alt="image" src="https://github.com/user-attachments/assets/6481ed43-d6ed-4d40-8592-2937a1f5bb30" />
+
 
 ---
 
@@ -80,6 +91,9 @@ For each group:
 
 > If AWS reports that the group still contains users, delete or remove the users first.
 
+<img width="2542" height="547" alt="image" src="https://github.com/user-attachments/assets/7b9ea4d9-eaad-413b-b0ab-e8872ec348d8" />
+
+
 ---
 
 # Step 3 – Delete the Custom Policy
@@ -104,6 +118,9 @@ Then:
 3. Confirm.
 
 > If the **Delete** option is unavailable, the policy is still attached to a user, group, or role. Detach it first, then delete the policy.
+
+<img width="2527" height="486" alt="image" src="https://github.com/user-attachments/assets/f9a04256-211f-4647-9275-ba3a60dbfb05" />
+
 
 ---
 
