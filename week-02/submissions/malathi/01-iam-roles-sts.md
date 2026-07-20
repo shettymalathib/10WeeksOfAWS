@@ -2927,37 +2927,41 @@ If someone asks, "Explain IAM Roles in AWS," you can say:
 #  Day 3 Complete Summary
 
 ```text
-Principal
-     │
-     ▼
-Requests IAM Role
-     │
-     ▼
-Trust Policy
-WHO can assume?
-     │
-     ▼
-Permission Policy
-WHAT can it do?
-     │
-     ▼
+EC2 / Lambda
+       │
+       ▼
+Needs AWS Access
+       │
+       ▼
+IAM Role
+       │
+       ├── Trust Policy
+       │     (WHO can assume the role?)
+       │
+       └── Permission Policy
+             (WHAT can the role do?)
+       │
+       ▼
+Instance Profile (EC2 only)
+       │
+       ▼
 AWS STS
 Creates Temporary Credentials
-     │
-     ▼
-Instance Profile (EC2 only)
-     │
-     ▼
-Application accesses AWS Service
-     │
-     ▼
-Credentials expire
-     │
-     ▼
-AWS SDK/CLI automatically refreshes them
+       │
+       ▼
+Application Calls AWS Service
+       │
+       ▼
+Access Allowed / Denied
+       │
+       ▼
+Credentials Expire
+       │
+       ▼
+AWS SDK / CLI Automatically Refreshes Credentials
 ```
 
-
+> Note: For EC2, an Instance Profile attaches the IAM Role to the EC2 instance.
 
 
 ***
