@@ -1,9 +1,3 @@
-## 📚 AWS Week 2 - Day 3 Master Notes
-
-### Part 1 – Introduction, Architecture & Core Concepts
-
----
-
 # AWS Week 2 - Day 3
 
 # EC2 Reads S3 Using an IAM Role
