@@ -316,11 +316,9 @@ Instead of using permanent credentials, the EC2 instance assumes an IAM Role thr
 
 
 
-**Architecture**
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/7c739232-c450-454c-af4f-9d51244ec772" />
 
 
-
-<img width="1122" height="1402" alt="image" src="https://github.com/user-attachments/assets/b1388b80-a49a-4afd-b089-27e47c77b091" />
 
 
 
