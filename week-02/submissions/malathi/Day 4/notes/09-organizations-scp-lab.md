@@ -505,6 +505,8 @@ s3:CreateBucket
 
 for all affected member accounts.
 
+> A company wants to ensure developers cannot create new S3 buckets in the Production environment. An SCP attached to the Production OU denies s3:CreateBucket. Even if a developer has AdministratorAccess, bucket creation is still denied because the SCP acts as a guardrail.
+
 ***
 
 
@@ -784,6 +786,21 @@ So:
 
 * **CloudAdhar-Admin** = Permission Set
 * **AWSReservedSSO_CloudAdhar-Admin_xxxxx** = IAM Role
+
+---
+
+### IAM Policy vs SCP
+
+
+| Feature                    | IAM Policy                   | SCP                                   |
+| -------------------------- | ---------------------------- | ------------------------------------- |
+| Grants permissions         | ✅ Yes                        | ❌ No                                  |
+| Limits permissions         | ❌ No                         | ✅ Yes                                 |
+| Applies to                 | IAM Users, Groups, and Roles | AWS Accounts and Organizational Units |
+| Explicit Deny              | ✅ Yes                        | ✅ Yes                                 |
+| Affects Management Account | N/A                          | ❌ No                                  |
+| Used in                    | IAM                          | AWS Organizations                     |
+
 
 ---
 
@@ -1358,6 +1375,11 @@ Denied
 
 This demonstrates that an Explicit Deny in an SCP overrides even an Administrator permission set.
 
+Example:
+
+> AWS first checks whether the IAM policy or Permission Set allows the requested action. It then evaluates any applicable Service Control Policies (SCPs).
+> If an SCP contains an Explicit Deny, the request is denied even if IAM allows it.
+
 ---
 
 # Part 6 – Review Consolidated Billing
@@ -1519,10 +1541,11 @@ It verifies the current AWS account, IAM role, and identity before making change
 
 * AWS Organizations centrally manages multiple AWS accounts.
 * The Organization Root is a hierarchy container and is different from the AWS Root User.
-* The Management Account manages the organization and pays the consolidated bill.
+* The Management Account manages the organization.
+* The Management Account receives and pays the consolidated bill for all member accounts.
 * Member Accounts are used to run workloads.
 * Organizational Units (OUs) group accounts with common policies.
-* Service Control Policies (SCPs) define the maximum permissions available to member accounts but do not grant permissions.
+* Service Control Policies (SCPs) define the maximum permissions that identities in member accounts can receive but do not grant permissions.
 * An Explicit Deny in an SCP overrides permissions granted by IAM policies or Permission Sets.
 * `FullAWSAccess` is attached by default and should generally be kept unless implementing a tested allow-list strategy.
 * IAM Identity Center provides secure single sign-on using temporary STS credentials.
