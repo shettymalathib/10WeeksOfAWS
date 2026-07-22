@@ -1533,3 +1533,118 @@ It verifies the current AWS account, IAM role, and identity before making change
 
 ***
 
+
+
+# 🧹 Day 4 – Cleanup Notes
+
+## Why Cleanup is Important
+
+After completing the practical, delete temporary resources to:
+
+* Avoid unnecessary AWS charges.
+* Keep the AWS environment clean.
+* Remove temporary security configurations.
+* Prevent unused resources from remaining active.
+
+---
+
+# Cleanup Order
+
+## 1. Delete Test S3 Buckets
+
+Delete any temporary S3 buckets created during the SCP demonstration.
+
+Example:
+
+```bash
+aws s3api delete-bucket --bucket <bucket-name> --region <region>
+```
+
+Verify deletion:
+
+```bash
+aws s3api head-bucket --bucket <bucket-name>
+```
+
+Expected result:
+
+```text
+404 Not Found
+```
+
+This confirms the bucket was successfully deleted.
+
+---
+
+## 2. Remove the Member Account from the Organization
+
+1. Sign in to the **CloudAdhar-Dev** account as the **root user**.
+2. Open **AWS Organizations**.
+3. Choose **Leave organization**.
+4. Confirm the prompts.
+
+**Note:** The member account must meet AWS standalone account prerequisites before it can leave the organization. This includes completed customer verification and billing setup.
+
+---
+
+## 3. Delete the AWS Organization
+
+After the member account leaves:
+
+1. Sign in to the **Management Account**.
+2. Open **AWS Organizations**.
+3. Confirm that only the management account remains.
+4. Delete the AWS Organization.
+
+---
+
+## 4. Remove IAM Identity Center Resources (Optional)
+
+If the lab is complete and you no longer need the setup:
+
+* Delete the **cloudadhar-demo** user.
+* Delete the **CloudAdhar-Admin** permission set.
+* Remove any account assignments.
+* Disable IAM Identity Center if it will no longer be used.
+
+---
+
+## 5. Delete the Test SCP (Optional)
+
+If the organization will continue to be used for other labs:
+
+* Delete the `Deny-S3-Bucket-Creation` SCP.
+* Remove the `Dev-Env` Organizational Unit if it is no longer needed.
+
+---
+
+# Cleanup Checklist
+
+```text
+✅ Deleted temporary S3 test bucket(s)
+
+✅ Verified bucket deletion
+
+✅ Member account left the organization
+
+✅ Deleted AWS Organization
+
+✅ Deleted IAM Identity Center user (optional)
+
+✅ Deleted Permission Set (optional)
+
+✅ Removed test SCP and OU (optional)
+
+✅ Verified no unnecessary billable resources remain
+```
+
+---
+
+# 📝 My Lab Notes
+
+During this lab, I successfully deleted the temporary S3 bucket created for testing.
+
+While removing the AWS Organization, the **CloudAdhar-Dev** member account could not initially leave the organization because **Customer Verification** had failed. After updating the account contact information to match the Aadhaar details, **Customer Verification** was successfully completed.
+
+AWS then required a temporary waiting period before allowing the member account to leave the organization. The remaining cleanup (leaving the organization, deleting the AWS Organization, and optionally removing IAM Identity Center resources) will be completed after this waiting period expires.
+
