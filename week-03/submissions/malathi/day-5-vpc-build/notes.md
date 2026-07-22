@@ -1,7 +1,3 @@
-Absolutely. I'll teach this as if you're **8 years old**, one step at a time. Don't memorize. **Understand the story.** Once you understand the story, AWS networking becomes easy.
-
----
-
 # Day 5 - VPC, CIDR, Subnets and Routing
 
 ## Imagine this...
