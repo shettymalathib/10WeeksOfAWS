@@ -2426,3 +2426,1504 @@ Think of this sentence:
 
 ***
 
+
+
+# Part 4 – VPC Peering vs Transit Gateway
+
+---
+
+# First, what is a VPC?
+
+Remember Day 5.
+
+A VPC is like your own housing society.
+
+```text
+VPC A
+```
+
+Imagine another company builds another housing society.
+
+```text
+VPC B
+```
+
+Now we have
+
+```text
+🏠 Society A (VPC A)
+
+🏠 Society B (VPC B)
+```
+
+---
+
+## Can they talk?
+
+No.
+
+They are completely isolated.
+
+Imagine two islands.
+
+```text
+Island A        Island B
+```
+
+Can people walk between them?
+
+❌ No.
+
+There is no bridge.
+
+AWS is exactly the same.
+
+Different VPCs cannot communicate unless **you create a connection**.
+
+---
+
+# AWS says
+
+"I'll build a bridge."
+
+That bridge is called
+
+# VPC Peering
+
+---
+
+Imagine
+
+```text
+Village A ------------ Village B
+```
+
+Now people can travel.
+
+That's VPC Peering.
+
+---
+
+## Real AWS
+
+```text
+VPC A
+
+──────────────
+
+VPC B
+```
+
+No communication.
+
+After Peering
+
+```text
+VPC A
+    │
+    │
+    │
+VPC B
+```
+
+Now EC2 in VPC A can talk to EC2 in VPC B (assuming routing and security rules allow it).
+
+---
+
+# Example
+
+Company has
+
+Production VPC
+
+and
+
+Database VPC
+
+```text
+Production
+
+↓
+
+Peering
+
+↓
+
+Database
+```
+
+Application server talks to database.
+
+Simple.
+
+---
+
+# Does Peering automatically work?
+
+No.
+
+Many beginners think
+
+"I created peering."
+
+Done.
+
+Wrong.
+
+You must also tell each VPC
+
+where to send traffic.
+
+Remember
+
+# Route Tables
+
+---
+
+Imagine Google Maps.
+
+If maps don't know the road,
+
+can they drive?
+
+No.
+
+Same in AWS.
+
+Route Tables need entries.
+
+---
+
+Example
+
+VPC A
+
+CIDR
+
+```
+10.0.0.0/16
+```
+
+VPC B
+
+CIDR
+
+```
+10.1.0.0/16
+```
+
+Route Table in A
+
+```text
+Destination
+
+10.1.0.0/16
+
+↓
+
+Peering Connection
+```
+
+Route Table in B
+
+```text
+Destination
+
+10.0.0.0/16
+
+↓
+
+Peering Connection
+```
+
+Both sides need routes.
+
+Think of it like two cities each putting up a road sign pointing to the other.
+
+---
+
+# Can overlapping CIDRs peer?
+
+Suppose
+
+VPC A
+
+```
+10.0.0.0/16
+```
+
+VPC B
+
+```
+10.0.0.0/16
+```
+
+Question
+
+If packet says
+
+"I need 10.0.5.10"
+
+Which VPC owns it?
+
+AWS cannot know.
+
+So AWS says
+
+❌ No Peering.
+
+CIDRs must **not overlap**.
+
+---
+
+# Biggest Trap
+
+This is asked in interviews.
+
+Imagine
+
+Three VPCs.
+
+```text
+VPC A
+
+VPC B
+
+VPC C
+```
+
+Create
+
+A ↔ B
+
+and
+
+A ↔ C
+
+Like this
+
+```text
+      B
+      |
+      |
+      A
+      |
+      |
+      C
+```
+
+Question
+
+Can B talk to C?
+
+Most beginners answer
+
+Yes.
+
+Wrong.
+
+---
+
+# Why?
+
+Because
+
+VPC Peering is
+
+# NOT TRANSITIVE
+
+Let's understand.
+
+---
+
+Imagine your friend.
+
+You know Rahul.
+
+Rahul knows Priya.
+
+Does that automatically mean
+
+you know Priya?
+
+No.
+
+Someone has to introduce you.
+
+Exactly.
+
+AWS says
+
+A knows B.
+
+A knows C.
+
+But
+
+B does NOT know C.
+
+---
+
+So
+
+```text
+B
+
+↓
+
+A
+
+↓
+
+C
+```
+
+Traffic stops.
+
+AWS does not forward it.
+
+---
+
+This is called
+
+# Non-Transitive Routing
+
+Remember this forever.
+
+---
+
+# If B wants C?
+
+You need another peering.
+
+```text
+A ↔ B
+
+A ↔ C
+
+B ↔ C
+```
+
+Now everyone has direct roads.
+
+---
+
+# Problem
+
+Imagine
+
+10 VPCs.
+
+How many peerings?
+
+Lots!
+
+Example
+
+```text
+A-B
+
+A-C
+
+A-D
+
+B-C
+
+B-D
+
+C-D
+```
+
+It becomes messy very quickly.
+
+Lots of route tables.
+
+Lots of maintenance.
+
+---
+
+AWS thought,
+
+"There must be a better way."
+
+So AWS invented
+
+# Transit Gateway
+
+---
+
+# Think of an Airport
+
+Imagine
+
+Mumbai
+
+Delhi
+
+Chennai
+
+Kolkata
+
+Instead of every city having a direct flight to every other city,
+
+they all connect to one big airport hub.
+
+```text
+Mumbai
+
+      |
+
+Delhi--Hub--Chennai
+
+      |
+
+Kolkata
+```
+
+Need Mumbai → Chennai?
+
+Go through the hub.
+
+Easy.
+
+Transit Gateway works exactly like that.
+
+---
+
+# Real AWS
+
+```text
+VPC A
+
+     |
+
+VPC B
+
+     |
+
+Transit Gateway
+
+     |
+
+VPC C
+
+     |
+
+VPC D
+```
+
+Every VPC connects only once—to the Transit Gateway.
+
+---
+
+# Now Question
+
+Can
+
+A talk to D?
+
+Yes.
+
+Because the Transit Gateway acts as the central router (subject to its route tables and any security controls).
+
+---
+
+# Why is it called Transit?
+
+Because traffic
+
+**transits** (passes through)
+
+the Gateway.
+
+---
+
+# Does TGW remove Route Tables?
+
+No.
+
+You still configure routes.
+
+There are:
+
+* VPC Route Tables (inside each VPC)
+* Transit Gateway Route Tables (inside the TGW)
+
+The TGW decides which attached VPCs can reach each other.
+
+---
+
+# Real Example
+
+Imagine a company.
+
+Production
+
+Development
+
+Testing
+
+Shared Services
+
+```text
+Prod
+
+Dev
+
+Test
+
+Shared
+```
+
+Instead of
+
+connecting each pair,
+
+everyone connects to
+
+Transit Gateway.
+
+Cleaner.
+
+Easier.
+
+---
+
+# Peering vs Transit
+
+Imagine roads.
+
+### Peering
+
+Private road between two houses.
+
+```text
+House A -------- House B
+```
+
+Only two houses.
+
+---
+
+### Transit Gateway
+
+Big traffic circle.
+
+```text
+      A
+
+      |
+
+B -- Roundabout -- C
+
+      |
+
+      D
+```
+
+Everyone enters the roundabout.
+
+Everyone can reach where they're allowed to go.
+
+---
+
+# Which one is cheaper?
+
+For **2 VPCs**
+
+Peering is usually simpler.
+
+For **50 VPCs**
+
+Transit Gateway is much easier to manage, though it has its own pricing.
+
+---
+
+# Easy Memory Trick
+
+**VPC Peering**
+
+= One bridge between two islands.
+
+**Transit Gateway**
+
+= One central airport or bus station connecting many cities.
+
+---
+
+# Quick Comparison
+
+| VPC Peering                | Transit Gateway                             |
+| -------------------------- | ------------------------------------------- |
+| Connects two VPCs directly | Central hub connecting many VPCs            |
+| One-to-one                 | Hub-and-spoke                               |
+| Needs routes in both VPCs  | Uses VPC and TGW route tables               |
+| No transitive routing      | Supports transitive routing through the hub |
+| CIDRs must not overlap     | Careful CIDR planning is still required     |
+
+---
+
+# Mini Quiz 😊
+
+### 1. Can two VPCs communicate automatically?
+
+👉 **No.**
+
+---
+
+### 2. What creates a direct connection between two VPCs?
+
+👉 **VPC Peering**
+
+---
+
+### 3. Is VPC Peering transitive?
+
+👉 **No.**
+
+If A ↔ B and A ↔ C, **B cannot reach C** through A.
+
+---
+
+### 4. What AWS service acts like a central networking hub?
+
+👉 **Transit Gateway**
+
+---
+
+### 5. Which is better for 100 VPCs?
+
+👉 **Transit Gateway**, because managing direct peerings between every pair of VPCs becomes complex.
+
+***
+
+
+# Part 5 – VPC Flow Logs
+
+---
+
+# Imagine your school
+
+Yesterday we learned
+
+* Security Guard (NACL)
+* Bodyguard (Security Group)
+
+Now imagine something happens.
+
+A student says,
+
+> "Someone came to my classroom."
+
+Teacher asks,
+
+> "Who?"
+
+Student says,
+
+> "I don't know."
+
+Teacher asks,
+
+> "What time?"
+
+Student says,
+
+> "I don't know."
+
+Teacher asks,
+
+> "Which classroom?"
+
+Student says,
+
+> "I don't know."
+
+Can anyone solve the problem?
+
+❌ No.
+
+There is no evidence.
+
+---
+
+Now imagine the school has CCTV.
+
+Every person entering is recorded.
+
+Teacher can now see
+
+```text
+Who came?
+
+When?
+
+From where?
+
+Which room?
+
+Allowed?
+
+Blocked?
+```
+
+Now we have evidence.
+
+AWS does the same thing.
+
+---
+
+# What is VPC Flow Log?
+
+A **VPC Flow Log** is like a **CCTV camera for your network traffic**.
+
+It records
+
+* Who talked
+* Who received
+* Which port
+* Which protocol
+* Whether AWS allowed or rejected the traffic
+
+It **does not** record the actual data inside the packets.
+
+---
+
+Imagine your house.
+
+Someone knocks.
+
+CCTV records
+
+```text
+Person came
+
+3 PM
+
+Front Door
+
+Allowed
+```
+
+Did CCTV record the conversation?
+
+No.
+
+It only records
+
+* Time
+* Person
+* Entry
+
+Flow Logs are exactly like that.
+
+---
+
+# Very Important
+
+Flow Logs do NOT record
+
+❌ Passwords
+
+❌ Website contents
+
+❌ Packet contents
+
+❌ HTTP body
+
+❌ Images
+
+❌ Files
+
+They only record
+
+**Network metadata**.
+
+---
+
+# What is Metadata?
+
+Think of a courier parcel.
+
+Outside the box
+
+```text
+From
+
+To
+
+Date
+
+Weight
+```
+
+Inside the box
+
+Birthday gift.
+
+Courier company doesn't know what's inside.
+
+It only knows the label.
+
+Flow Logs are exactly the same.
+
+---
+
+# Example
+
+Suppose
+
+Your laptop
+
+opens a website.
+
+```text
+Laptop
+
+↓
+
+EC2
+```
+
+Flow Log records something like
+
+```text
+Source IP
+
+Destination IP
+
+Port
+
+Protocol
+
+Action
+```
+
+Example
+
+```text
+203.0.113.10
+
+↓
+
+10.0.1.20
+
+Port 80
+
+TCP
+
+ACCEPT
+```
+
+Notice
+
+It doesn't record
+
+```text
+GET /index.html
+```
+
+or
+
+```text
+Username = John
+```
+
+Only connection details.
+
+---
+
+# Where can Flow Logs be enabled?
+
+AWS allows you to enable Flow Logs at three levels.
+
+## 1. Entire VPC
+
+Everything inside the VPC is monitored.
+
+```text
+VPC
+
+↓
+
+Flow Logs
+```
+
+---
+
+## 2. One Subnet
+
+Only one subnet is monitored.
+
+```text
+Subnet
+
+↓
+
+Flow Logs
+```
+
+---
+
+## 3. One ENI (Network Interface)
+
+Only one EC2/network interface is monitored.
+
+```text
+EC2
+
+↓
+
+ENI
+
+↓
+
+Flow Logs
+```
+
+---
+
+# Where are Flow Logs stored?
+
+AWS doesn't keep them forever automatically.
+
+You choose where to send them.
+
+Usually
+
+### Option 1
+
+CloudWatch Logs
+
+Good for searching.
+
+---
+
+### Option 2
+
+Amazon S3
+
+Good for long-term storage.
+
+---
+
+### Option 3
+
+Amazon Data Firehose
+
+Good for streaming logs to analytics systems.
+
+---
+
+# What information is recorded?
+
+Imagine this traffic.
+
+```text
+Laptop
+
+↓
+
+EC2
+```
+
+Flow Log may record
+
+```text
+Source IP
+
+Destination IP
+
+Source Port
+
+Destination Port
+
+Protocol
+
+Packets
+
+Bytes
+
+Action
+```
+
+Let's understand each one.
+
+---
+
+## Source IP
+
+Who started the conversation?
+
+Example
+
+```text
+203.0.113.10
+```
+
+This is the client's IP.
+
+---
+
+## Destination IP
+
+Who received it?
+
+Example
+
+```text
+10.0.1.15
+```
+
+Your EC2.
+
+---
+
+## Source Port
+
+Temporary port.
+
+Example
+
+```text
+53000
+```
+
+Remember ephemeral ports?
+
+Exactly.
+
+---
+
+## Destination Port
+
+Service port.
+
+Example
+
+```text
+80
+```
+
+Means HTTP.
+
+---
+
+## Protocol
+
+How is data sent?
+
+Usually
+
+```text
+TCP
+
+UDP
+
+ICMP
+```
+
+---
+
+## Packets
+
+How many packets were exchanged.
+
+---
+
+## Bytes
+
+How much data was transferred.
+
+---
+
+## Action
+
+This is very important.
+
+Two possibilities.
+
+```text
+ACCEPT
+
+REJECT
+```
+
+---
+
+# ACCEPT
+
+Imagine security guard.
+
+Visitor comes.
+
+Security guard says
+
+> Come inside.
+
+Flow Log records
+
+```text
+ACCEPT
+```
+
+---
+
+# REJECT
+
+Visitor comes.
+
+Security guard says
+
+> No entry.
+
+Flow Log records
+
+```text
+REJECT
+```
+
+---
+
+# Very Important Interview Question
+
+If Flow Log says
+
+```text
+ACCEPT
+```
+
+Does it mean the application worked?
+
+Most beginners say
+
+Yes.
+
+Wrong.
+
+---
+
+Example
+
+Your EC2
+
+accepted network traffic.
+
+But
+
+Apache isn't running.
+
+Browser shows
+
+```text
+Connection Failed
+```
+
+Flow Log still says
+
+```text
+ACCEPT
+```
+
+because
+
+The **network** allowed the traffic.
+
+The **application** failed.
+
+This is why the notes say:
+
+> **An `ACCEPT` record proves the network controls accepted the flow; it does not prove the application listener or process worked.**
+
+---
+
+# Log Status
+
+Besides ACCEPT/REJECT, you'll also see a status.
+
+Three common values.
+
+```text
+OK
+
+NODATA
+
+SKIPDATA
+```
+
+Let's understand.
+
+---
+
+# OK
+
+Everything normal.
+
+AWS successfully recorded the traffic.
+
+Think
+
+Teacher checked attendance.
+
+Everything saved.
+
+---
+
+# NODATA
+
+No traffic happened.
+
+Imagine CCTV watched the classroom all day.
+
+Nobody entered.
+
+CCTV still worked.
+
+There was simply nothing to record.
+
+That's
+
+```text
+NODATA
+```
+
+---
+
+# SKIPDATA
+
+AWS wanted to record traffic,
+
+but some records couldn't be captured.
+
+Usually because of internal service limitations (for example, under very high logging load).
+
+Think
+
+CCTV recorded most visitors,
+
+but missed a few because it couldn't keep up.
+
+That's
+
+```text
+SKIPDATA
+```
+
+---
+
+# Troubleshooting Example
+
+Suppose
+
+You cannot SSH into EC2.
+
+Question
+
+Where do you look?
+
+Flow Logs.
+
+You find
+
+```text
+REJECT
+```
+
+That means
+
+Something in the network blocked it.
+
+Maybe
+
+* NACL
+* Security Group
+* Route problem
+
+Now suppose
+
+Flow Logs show
+
+```text
+ACCEPT
+```
+
+But SSH still doesn't work.
+
+Now you know
+
+The network allowed it.
+
+The problem may be
+
+* SSH service not running
+* Wrong username
+* Wrong key pair
+* OS firewall
+* Application issue
+
+Flow Logs helped narrow down the problem.
+
+---
+
+# CloudWatch Logs Insights
+
+AWS lets you search logs using queries.
+
+Example
+
+```text
+fields @timestamp, interfaceId, srcAddr, dstAddr, srcPort, dstPort, protocol, action
+| filter action = "REJECT"
+| stats count(*) as rejects by dstAddr, dstPort
+| sort rejects desc
+| limit 20
+```
+
+Don't worry about memorizing this.
+
+It simply asks:
+
+> "Show me the destinations and ports with the most rejected connections."
+
+Think of it like searching CCTV footage for only people who were denied entry.
+
+---
+
+# Easy Memory Trick
+
+Imagine
+
+Flow Logs = CCTV Camera
+
+Security Group = Personal Bodyguard
+
+NACL = Apartment Gate Security
+
+NAT = Delivery Boy
+
+Gateway Endpoint = Private Road to S3/DynamoDB
+
+Interface Endpoint = Private AWS Office (ENI)
+
+Transit Gateway = Airport Hub
+
+These analogies fit together and make the networking concepts much easier to remember.
+
+---
+
+# Quick Revision of Day 6
+
+## NAT Gateway
+
+Private EC2 → NAT → Internet
+
+✔ Outbound only
+
+✔ Lives in Public Subnet
+
+✔ Has Elastic IP
+
+---
+
+## Security Group
+
+Protects EC2/ENI
+
+✔ Stateful
+
+✔ Allow only
+
+---
+
+## NACL
+
+Protects Subnet
+
+✔ Stateless
+
+✔ Allow + Deny
+
+✔ Return traffic must also be allowed
+
+---
+
+## Gateway Endpoint
+
+✔ S3
+
+✔ DynamoDB
+
+✔ Route Table entry
+
+✔ No ENI
+
+---
+
+## Interface Endpoint
+
+✔ Many AWS services
+
+✔ Creates ENI
+
+✔ Has Private IP
+
+✔ Can have Security Group
+
+---
+
+## VPC Peering
+
+✔ Connects two VPCs directly
+
+✔ Not transitive
+
+---
+
+## Transit Gateway
+
+✔ Connects many VPCs
+
+✔ Central hub
+
+✔ Supports transitive routing through the hub
+
+---
+
+## VPC Flow Logs
+
+✔ Network metadata only
+
+✔ No packet contents
+
+✔ Shows ACCEPT or REJECT
+
+✔ Can be sent to CloudWatch Logs, S3, or Data Firehose
+
+✔ `ACCEPT` means the **network** allowed the traffic—not necessarily that the application worked.
+
+---
+
+# One Final Story (Remember the Whole Day)
+
+Imagine your company:
+
+🏢 **VPC** = Office Building
+
+🚪 **Security Group** = Employee's Cabin Door
+
+🚧 **NACL** = Main Gate Security
+
+📦 **NAT Gateway** = Office Delivery Person who goes outside and brings things back
+
+🛣️ **Gateway Endpoint** = Private Road to the Warehouse (S3/DynamoDB)
+
+🏬 **Interface Endpoint** = Private Service Desk inside the office for many AWS services
+
+🌉 **VPC Peering** = Bridge connecting two office buildings
+
+🚌 **Transit Gateway** = Central Bus Terminal connecting many office buildings
+
+📹 **VPC Flow Logs** = CCTV system recording who entered, where they went, and whether they were allowed or blocked (but not what they talked about).
+
+If you remember this story, you'll be able to reconstruct most of the Day 6 networking concepts even if you forget the exact wording.
+
